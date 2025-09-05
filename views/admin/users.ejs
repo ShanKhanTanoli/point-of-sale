@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3.0, user-scalable=yes">
+
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>
+        <%= siteTitle %>
+    </title>
+    <!-- Theme styles -->
+    <%- include('partials/styles') %>
+</head>
+
+<body class="sb-nav-fixed">
+    <!-- Navbar -->
+    <%- include('partials/navbar') %>
+        <div id="layoutSidenav">
+            <!-- Sidebar -->
+            <%- include('partials/sidebar') %>
+                <div id="layoutSidenav_content">
+                    <main>
+                        <div class="container-fluid px-4">
+
+                            <div class="d-sm-flex align-items-center justify-content-between">
+                                <h1 class="my-4">
+                                    <%= pageTitle %>
+                                </h1>
+                                <div class="d-flex align-items-center my-4">
+                                    <button type="button" id="addUserButton" onclick="addUserModal(event)"
+                                        class="btn btn-primary shadow-sm d-flex justify-content-center align-items-center">
+                                        <i class="fas fa-plus fa-sm text-white-50 pe-1"></i> Add New
+                                    </button>
+                                </div>
+                            </div>
+
+
+                            <div class="row g-5">
+
+                                <div class="col-md-12 col-lg-12">
+                                    <table id="datatablesSimple">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Visibility</th>
+                                                <!-- <th>Created At</th>
+                                                <th>Created By</th> -->
+                                                <!-- <th>Updated At</th>
+                                                <th>Updated By</th> -->
+                                                <th>Role</th>
+                                                <th class="text-center">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% if(users !=null){ %>
+                                                <% users.forEach((user, index)=> { %>
+                                                    <tr>
+                                                        <td>
+                                                            <%= user.user_id %>
+                                                        </td>
+                                                        <td>
+                                                            <%= user.user_name %>
+                                                        </td>
+                                                        <td>
+                                                            <%= user.user_email %>
+                                                        </td>
+                                                        <td>
+                                                            <span
+                                                                class="badge text-uppercase <%= user.is_active == 1 ? 'bg-primary' : 'bg-danger' %>">
+                                                                <%= user.is_active==1 ? 'ACTIVE' : 'IN-ACTIVE' %>
+                                                            </span>
+                                                        </td>
+                                                        <!-- <td>
+                                                            <%= user.created_at %>
+                                                        </td> -->
+                                                        <!-- <td>
+                                                            <%= user.created_by %>
+                                                        </td> -->
+                                                        <!-- <td>
+                                                            <%= user.updated_at %>
+                                                        </td>
+                                                        <td>
+                                                            <%= user.updated_by %>
+                                                        </td> -->
+                                                        <td>
+                                                            <span
+                                                                class="badge text-uppercase <%= user.role_name ? 'bg-primary' : 'bg-danger' %>">
+                                                                <%= user.role_name ? user.role_name : 'NOT ASSIGNED' %>
+                                                            </span>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <button type="button" data-user-id="<%= user.user_id %>"
+                                                                data-user-name="<%= user.user_name %>"
+                                                                data-user-email="<%= user.user_email %>"
+                                                                data-user-is-active="<%= user.is_active %>"
+                                                                data-user-role-name="<%= user.role_name %>"
+                                                                id="edit<%= user.id %>User"
+                                                                onclick="updateUserModal(event)"
+                                                                class="btn btn-sm btn-link text-success">
+                                                                update
+                                                            </button>
+
+                                                            <button type="button" data-user-id="<%= user.user_id %>"
+                                                                data-user-name="<%= user.user_name %>"
+                                                                data-user-email="<%= user.user_email %>"
+                                                                data-user-is-active="<%= user.is_active %>"
+                                                                data-user-role-name="<%= user.role_name %>"
+                                                                id="edit<%= user.id %>User"
+                                                                onclick="updateUserPasswordModal(event)"
+                                                                class="btn btn-sm btn-link text-danger">
+                                                                change password
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <% }) %>
+                                                        <% } %>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Modal -->
+                        <%- include('partials/modal') %>
+
+                    </main>
+                    <!-- Footer -->
+                    <%- include('partials/footer') %>
+                </div>
+        </div>
+        <!-- Theme scripts -->
+        <%- include('partials/scripts') %>
+            <!-- Plugin scripts -->
+            <script src="/js/simple-datatables.min.js"></script>
+            <script src="/js/datatables-simple-demo.js"></script>
+
+            <script>
+
+                /**
+                 * Load roles
+                 * @param selectIdClass
+                 * @param selectedValue
+                 * Returns Void
+                 */
+                const loadRoles = (selectIdClass, selectedValue) => {
+
+                    // return;
+                    // Make http request
+                    makeHTTPRequest("/admin/roles", "POST", "application/json", JSON.stringify({}), function (success) {
+                        console.log(success);
+
+                        let renderRoles = ``;
+
+                        if(success.roles){
+                            renderRoles+= success.roles.map((role, id)=> `<option ${role.role_name == selectedValue ? 'selected' : ''} value="${role.id}">${role.role_name}</option>`).join('');
+                        }
+                        // Add options
+                        $(selectIdClass).html(renderRoles);
+
+                    }, function (error) {
+                        let errorMessage = error.responseJSON ? (error.responseJSON.message ? error.responseJSON.message : 'Something went wrong. Please refresh the page and try again.') : 'Something went wrong. Please refresh the page and try again.';
+                        // Error message
+                        toastr.error(errorMessage, "Error");
+                    }, function (always) {
+                    });
+                }
+
+                // Update user modal
+                function updateUserModal(event) {
+
+                    // Get user id
+                    let user_id = $(event.target).attr("data-user-id");
+
+                    // Get user name
+                    let user_name = $(event.target).attr("data-user-name");
+
+                    // Get user price
+                    let user_email = $(event.target).attr("data-user-email");
+
+                    // Get user visibility
+                    let user_visibility = $(event.target).attr("data-user-is-active");
+
+                    // Get user role name
+                    let user_role_name = $(event.target).attr("data-user-role-name");
+
+                    // Form element
+                    const htmlForm = `<form class="needs-validation" onsubmit="updateUser(event)">
+
+                                        <div class="row g-3">
+
+                                            <div class="col-sm-6">
+                                                <label for="userNameInput" class="form-label">
+                                                    User Name*
+                                                </label>
+
+                                                <div class="input-group has-validation">
+                                                        <input type="hidden" id="userIdInput" value="${user_id}" required="">
+                                                        <input type="text" class="form-control" id="userNameInput" placeholder="User Name" value="${user_name}" required="">
+                                                        <div class="invalid-feedback">
+                                                            User name is required.
+                                                        </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-6">
+                                                <label for="userEmailInput" class="form-label">
+                                                    User Email*
+                                                </label>
+
+                                                <div class="input-group has-validation">
+                                                    
+                                                    <input type="email" class="form-control" id="userEmailInput" placeholder="User Email" value="${user_email}" required="">
+                                                    <div class="invalid-feedback">
+                                                        User Email is required.
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 col-lg-6 col-sm-6">
+                                                <label for="Visibility" class="form-label">Visibility*</label>
+                                                <select class="form-select" id="selectUserVisibility" required="">
+                                                    <option value="1" ${user_visibility == 1 ? 'selected' : ''}>Active</option>
+                                                    <option value="0" ${user_visibility == 0 ? 'selected' : ''}>Non-active</option>
+                                                </select>
+                                                <div class="invalid-feedback" id="selectUserVisibilityErrorFeedback" style="display: none;">
+                                                    Please select visibility.
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 col-lg-6 col-sm-6">
+                                                <label for="Role" class="form-label">Role*</label>
+                                                <select class="form-select" id="selectedUserRole" required="">
+                                                    <option value="">Loading...</option>
+                                                </select>
+                                                <div class="invalid-feedback" id="selectedUserRoleErrorFeedback" style="display: none;">
+                                                    Please select Role.
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <button class="w-100 btn btn-primary btn-lg mt-5" id="updateUserButton" type="submit">
+                                            Save Changes
+                                        </button>
+
+                                    </form>`;
+
+                    // Modal header
+                    const modalHeader = `<h5 class="modal-title" id="genericModalLabel">Update User</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>`;
+
+                    // Modal footer
+                    const modalFooter = `<button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Back</button>
+                                        <button type="button" class="btn btn-primary btn-sm collectAmount" id="collectAmount" onclick="collectAmount(event)">Collect</button>`;
+
+                    // Modal id
+                    const genericModal = $("#genericModal");
+
+                    //  Modal header id
+                    const genericModalHeader = $("#genericModalHeader");
+                    // Add html
+                    genericModalHeader.html(modalHeader);
+
+                    //  Modal body id
+                    const genericModalBody = $("#genericModalBody");
+                    // Add html
+                    genericModalBody.html(htmlForm);
+
+                    //  Modal footer id
+                    const genericModalFooter = $("#genericModalFooter");
+                    // Add html
+                    // genericModalFooter.html(modalFooter);
+
+                    // Open modal
+                    genericModal.modal('show');
+                    
+                    //Load roles
+                    loadRoles("#selectedUserRole", user_role_name);
+                }
+
+                // Update user
+                function updateUser(event) {
+
+                    event.preventDefault();
+                    // Get inputs
+                    let userIdInput = $("#userIdInput").val();
+                    let userNameInput = $("#userNameInput").val();
+                    let userEmailInput = $("#userEmailInput").val();
+                    let selectUserVisibility = $("#selectUserVisibility").val();
+                    let userRoleIdInput = $("#selectedUserRole").val();
+
+                    // Get button
+                    let updateUserButton = $("#updateUserButton");
+
+                    // Disable
+                    updateUserButton.addClass('disabled');
+                    // Change the text
+                    updateUserButton.text('Saving');
+
+                    // Make http request
+                    makeHTTPRequest("/admin/updateUser", "POST", "application/json", JSON.stringify({ userIdInput, userNameInput, userEmailInput, userRoleIdInput, selectUserVisibility }),
+                        function (success) {
+                            // Get success message
+                            let successMessage = success.message ? success.message : 'Operation successful.';
+                            // Success message
+                            toastr.success(successMessage, "Success");
+                            // Update the page
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+
+                        }, function (error) {
+
+                            let errorMessage = error.responseJSON ? (error.responseJSON.message ? error.responseJSON.message : 'Something went wrong. Please refresh the page and try again.') : 'Something went wrong. Please refresh the page and try again.';
+                            // Error message
+                            toastr.error(errorMessage, "Error");
+                        }, function (always) {
+                            // Enable
+                            updateUserButton.removeClass('disabled');
+                            // Change the text
+                            updateUserButton.text('Save Changes');
+                        });
+                }
+
+                // Update user modal
+                function updateUserPasswordModal(event) {
+
+                    // Get user id
+                    let user_id = $(event.target).attr("data-user-id");
+
+                    // Get user name
+                    let user_name = $(event.target).attr("data-user-name");
+
+                    // Get user price
+                    let user_email = $(event.target).attr("data-user-email");
+
+                    // Get user visibility
+                    let user_visibility = $(event.target).attr("data-user-is-active");
+
+                    // Get user role name
+                    let user_role_name = $(event.target).attr("data-user-role-name");
+
+                    // Form element
+                    const htmlForm = `<form class="needs-validation" onsubmit="updateUserPassword(event)">
+
+                                        <div class="row g-3">
+
+                                            <input type="hidden" id="userIdInput" value="${user_id}" required="">
+
+                                            <div class="col-sm-6">
+                                                <label for="userPasswordInput" class="form-label">
+                                                    User Password
+                                                </label>
+
+                                                <div class="input-group has-validation">
+                                                    <input type="password" class="form-control" id="userPasswordInput" placeholder="User Password" value="">
+                                                    <div class="invalid-feedback">
+                                                        User Password is required.
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-6">
+                                                <label for="userConfirmPasswordInput" class="form-label">
+                                                    Confirm Password
+                                                </label>
+
+                                                <div class="input-group has-validation">
+                                                    
+                                                    <input type="password" class="form-control" id="userConfirmPasswordInput" placeholder="Confirm Password" value="">
+                                                    <div class="invalid-feedback">
+                                                        Confirm Password is required.
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <button class="w-100 btn btn-primary btn-lg mt-5" id="updateUserPasswordButton" type="submit">
+                                            Save Changes
+                                        </button>
+
+                                    </form>`;
+
+                    // Modal header
+                    const modalHeader = `<h5 class="modal-title" id="genericModalLabel">Update User Password</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>`;
+
+                    // Modal id
+                    const genericModal = $("#genericModal");
+
+                    //  Modal header id
+                    const genericModalHeader = $("#genericModalHeader");
+                    // Add html
+                    genericModalHeader.html(modalHeader);
+
+                    //  Modal body id
+                    const genericModalBody = $("#genericModalBody");
+                    // Add html
+                    genericModalBody.html(htmlForm);
+
+                    // Open modal
+                    genericModal.modal('show');
+                    
+                }
+
+                // Update user
+                function updateUserPassword(event) {
+
+                    event.preventDefault();
+
+                    let userIdInput = $("#userIdInput").val();
+                    let userPasswordInput = $("#userPasswordInput").val();
+                    let userConfirmPasswordInput = $("#userConfirmPasswordInput").val();
+
+                    // Match password
+                    if(userPasswordInput !== userConfirmPasswordInput){
+                      // Error message
+                        toastr.error("Password and confirm password does not match.","Error");
+                        return;  
+                    }
+
+                    // Get button
+                    let updateUserPasswordButton = $("#updateUserPasswordButton");
+
+                    // Disable
+                    updateUserPasswordButton.addClass('disabled');
+                    // Change the text
+                    updateUserPasswordButton.text('Saving');
+
+                    // Make http request
+                    makeHTTPRequest("/admin/updateUserPassword", "POST", "application/json", JSON.stringify({ userIdInput, userPasswordInput }),
+                        function (success) {
+                            // Get success message
+                            let successMessage = success.message ? success.message : 'Operation successful.';
+                            // Success message
+                            toastr.success(successMessage, "Success");
+                            // Update the page
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+
+                        }, function (error) {
+
+                            let errorMessage = error.responseJSON ? (error.responseJSON.message ? error.responseJSON.message : 'Something went wrong. Please refresh the page and try again.') : 'Something went wrong. Please refresh the page and try again.';
+                            // Error message
+                            toastr.error(errorMessage, "Error");
+                        }, function (always) {
+                            // Enable
+                            updateUserPasswordButton.removeClass('disabled');
+                            // Change the text
+                            updateUserPasswordButton.text('Save Changes');
+                        });
+                }
+
+
+                // Add user modal
+                function addUserModal(event) {
+
+                    // Get user id
+                    let user_id = $(event.target).attr("data-user-id");
+
+                    // Get User name
+                    let user_name = $(event.target).attr("data-user-name");
+
+                    // Get user email
+                    let user_email = $(event.target).attr("data-user-email");
+
+                    // Get user visibility
+                    let user_visibility = $(event.target).attr("data-user-is-active");
+
+                    // Get user role name
+                    let user_role_name = $(event.target).attr("data-user-role-name");
+
+                    // Form element
+                    const htmlForm = `<form class="needs-validation" onsubmit="addUser(event)">
+
+                                        <div class="row g-3">
+
+                                            <div class="col-sm-6">
+                                                <label for="userNameInput" class="form-label">
+                                                    User Name*
+                                                </label>
+
+                                                <div class="input-group has-validation">
+                                                        <input type="text" class="form-control" id="userNameInput" placeholder="User Name" value="" required="">
+                                                        <div class="invalid-feedback">
+                                                            User name is required.
+                                                        </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-6">
+                                                <label for="userEmailInput" class="form-label">
+                                                    User Email*
+                                                </label>
+
+                                                <div class="input-group has-validation">
+                                                    
+                                                    <input type="email" class="form-control" id="userEmailInput" placeholder="User Email" value="" required="">
+                                                    <div class="invalid-feedback">
+                                                        User Email is required.
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 col-lg-6 col-sm-6">
+                                                <label for="Visibility" class="form-label">Visibility*</label>
+                                                <select class="form-select" id="selectUserVisibility" required="">
+                                                    <option value="0">Non-active</option>
+                                                    <option value="1">Active</option>
+                                                </select>
+                                                <div class="invalid-feedback" id="selectUserVisibilityErrorFeedback" style="display: none;">
+                                                    Please select visibility.
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 col-lg-6 col-sm-6">
+                                                <label for="Role" class="form-label">Role*</label>
+                                                <select class="form-select" id="selectUserRole" required="">
+                                                    <option value="">Loading...</option>
+                                                </select>
+                                                <div class="invalid-feedback" id="selectUserRoleErrorFeedback" style="display: none;">
+                                                    Please select Role.
+                                                </div>
+                                            </div>
+
+                                            
+                                            <div class="col-sm-6">
+                                                <label for="userPasswordInput" class="form-label">
+                                                    User Password*
+                                                </label>
+
+                                                <div class="input-group has-validation">
+                                                    
+                                                    <input type="password" class="form-control" id="userPasswordInput" placeholder="User Password" value="" required="">
+                                                    <div class="invalid-feedback">
+                                                        User Password is required.
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-6">
+                                                <label for="userConfirmPasswordInput" class="form-label">
+                                                    Confirm Password*
+                                                </label>
+
+                                                <div class="input-group has-validation">
+                                                    
+                                                    <input type="password" class="form-control" id="userConfirmPasswordInput" placeholder="Confirm Password" value="" required="">
+                                                    <div class="invalid-feedback">
+                                                        Confirm Password is required.
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <button class="w-100 btn btn-primary btn-lg mt-5" id="addUserButton" type="submit">
+                                            Save Changes
+                                        </button>
+
+                                    </form>`;
+
+                    // Modal header
+                    const modalHeader = `<h5 class="modal-title" id="genericModalLabel">Add User</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>`;
+
+                    // Modal id
+                    const genericModal = $("#genericModal");
+
+                    //  Modal header id
+                    const genericModalHeader = $("#genericModalHeader");
+                    // Add html
+                    genericModalHeader.html(modalHeader);
+
+                    //  Modal body id
+                    const genericModalBody = $("#genericModalBody");
+                    // Add html
+                    genericModalBody.html(htmlForm);
+
+                    // Open modal
+                    genericModal.modal('show');
+
+                    // Load roles
+                    loadRoles("#selectUserRole","");
+                }
+
+                // Add user
+                function addUser(event) {
+
+                    event.preventDefault();
+
+                    let userNameInput = $("#userNameInput").val();
+                    let userEmailInput = $("#userEmailInput").val();
+                    let selectUserVisibility = $("#selectUserVisibility").val();
+                    let userRoleIdInput = $("#selectUserRole").val();
+
+                    let userPasswordInput = $("#userPasswordInput").val();
+                    let userConfirmPasswordInput = $("#userConfirmPasswordInput").val();
+
+                    if(!checkForValue(userPasswordInput)){
+                        // Error message
+                        toastr.error("Please enter password.","Error");
+                        return;
+                    }
+
+                    if(!checkForValue(userConfirmPasswordInput)){
+                        // Error message
+                        toastr.error("Please enter confirm password.","Error");
+                        return;
+                    }
+
+                    // Match password
+                    if(userPasswordInput !== userConfirmPasswordInput){
+                      // Error message
+                        toastr.error("Password and confirm password does not match.","Error");
+                        return;  
+                    }
+
+                    // Get button
+                    let addUserButton = $("#addUserButton");
+
+                    // Disable
+                    addUserButton.addClass('disabled');
+                    // Change the text
+                    addUserButton.text('Saving');
+
+                    // Make http request
+                    makeHTTPRequest("/admin/addUser", "POST", "application/json", JSON.stringify({ userNameInput, userEmailInput, userPasswordInput, userRoleIdInput, selectUserVisibility }),
+                        function (success) {
+                            // Get success message
+                            let successMessage = success.message ? success.message : 'Operation successful.';
+                            // Success message
+                            toastr.success(successMessage, "Success");
+                            // Update the page
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+
+                        }, function (error) {
+
+                            let errorMessage = error.responseJSON ? (error.responseJSON.message ? error.responseJSON.message : 'Something went wrong. Please refresh the page and try again.') : 'Something went wrong. Please refresh the page and try again.';
+                            // Error message
+                            toastr.error(errorMessage, "Error");
+                        }, function (always) {
+                            // Enable
+                            addUserButton.removeClass('disabled');
+                            // Change the text
+                            addUserButton.text('Save Changes');
+                        });
+                }
+
+            </script>
+</body>
+
+</html>

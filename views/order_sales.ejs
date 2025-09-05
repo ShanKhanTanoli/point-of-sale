@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3.0, user-scalable=yes">
+
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>
+        <%= siteTitle %>
+    </title>
+    <!-- Theme styles -->
+    <%- include('partials/styles') %>
+</head>
+
+<body class="sb-nav-fixed">
+    <!-- Navbar -->
+    <%- include('partials/navbar') %>
+        <div id="layoutSidenav">
+            <!-- Sidebar -->
+            <%- include('partials/sidebar') %>
+                <div id="layoutSidenav_content">
+                    <main>
+                        <div class="container-fluid px-4">
+
+                            <div class="d-sm-flex align-items-center justify-content-between">
+                                <h1 class="my-4">
+                                    <%= pageTitle %>
+                                </h1>
+                                <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                                    <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
+                                </a> -->
+                                <!-- <input class="d-none d-sm-inline-block shadow-sm" type="text" id="datepicker" placeholder="Select a date"> -->
+                                 <!-- HTML Inputs -->
+                                <div class="d-flex align-items-center my-4" style="column-gap: 0.5rem;">
+                                    <label for="from">From:</label>
+                                    <input class="form-control" type="text" id="from" name="from">
+
+                                    <label for="to">To:</label>
+                                    <input class="form-control" type="text" id="to" name="to">
+
+                                    <button type="button" id="filterSalesButton" onclick="ordersPaymentsFilter(event)" class="btn btn-primary shadow-sm d-flex justify-content-center align-items-center">
+                                        <i class="fas fa-filter fa-sm text-white-50 pe-1"></i> Filter
+                                    </button>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+
+                            <div class="col-xl-4 col-md-6 mb-4">
+                                <div class="card border-left-primary shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1" id="displayCardPaymentsHeading">
+                                                    Card Payments (0)
+                                                </div>
+
+                                                <div class="h4 mb-2 font-weight-bold text-gray-800" id="displayCardPaymentsAmount">
+                                                    AED 0
+                                                </div>
+
+                                                <div class="small text-success mb-0 font-weight-bold text-gray-800" id="displayCardPaymentsCollectedAmount">
+                                                    AED 0 Collected
+                                                </div>
+
+                                                <div class="small text-danger mb-0 font-weight-bold text-gray-800" id="displayCardPaymentsPendingAmount">
+                                                    AED 0 Pending
+                                                </div>
+
+
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-credit-card fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-6 mb-4">
+                                <div class="card border-left-primary shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1" id="displayCashPaymentsHeading">
+                                                    Cash Payments (0)
+                                                </div>
+                                                
+                                                <div class="h4 mb-2 font-weight-bold text-gray-800" id="displayCashPaymentsAmount">
+                                                    AED 0
+                                                </div>
+
+                                                <div class="small text-success mb-0 font-weight-bold text-gray-800" id="displayCashPaymentsCollectedAmount">
+                                                    AED 0 Collected
+                                                </div>
+
+                                                <div class="small text-danger mb-0 font-weight-bold text-gray-800" id="displayCashPaymentsPendingAmount">
+                                                    AED 0 Pending
+                                                </div>
+
+
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-money-bill fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-6 mb-4">
+                                <div class="card border-left-primary shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1" id="displayTotalPaymentsHeading">
+                                                    Total Payments (0)
+                                                </div>
+
+                                                <div class="h4 mb-2 font-weight-bold text-gray-800" id="displayTotalPaymentAmount">
+                                                    AED 0
+                                                </div>
+
+                                                 <div class="small text-success mb-0 font-weight-bold text-gray-800" id="displayTotalPaymentCollectedAmount">
+                                                    AED 0 Collected
+                                                </div>
+
+                                                <div class="small text-danger mb-0 font-weight-bold text-gray-800" id="displayTotalPaymentPendingAmount">
+                                                    AED 0 Pending
+                                                </div>
+
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-coins fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                            <div class="row g-5">
+
+                                <div class="col-md-12 col-lg-12" id="renderclosedOrdersTable">
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <div class="spinner-border text-dark spinner-border" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    
+                    <!-- Modal -->
+                    <%- include('partials/modal') %>
+
+                    </main>
+                    <!-- Footer -->
+                    <%- include('partials/footer') %>
+                </div>
+        </div>
+        <!-- Theme scripts -->
+        <%- include('partials/scripts') %>
+            <!-- Plugin scripts -->
+            <script src="/js/simple-datatables.min.js"></script>
+            <script src="/js/datatables-simple-demo.js"></script>
+
+            <!-- jQuery UI -->
+            <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+            <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+
+            
+            <script src="/js/libs/Payments.js"></script>
+
+</body>
+
+</html>

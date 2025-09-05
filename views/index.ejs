@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3.0, user-scalable=yes">
+
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>
+        <%= siteTitle %>
+    </title>
+    <!-- Theme styles -->
+    <%- include('partials/styles') %>
+</head>
+
+<body class="sb-nav-fixed">
+    <!-- Navbar -->
+    <%- include('partials/navbar') %>
+        <div id="layoutSidenav">
+            <!-- Sidebar -->
+            <%- include('partials/sidebar') %>
+                <div id="layoutSidenav_content">
+                    <main>
+                        <div class="container-fluid px-4">
+
+                            <h1 class="my-4">
+                                <%= pageTitle %>
+                            </h1>
+
+
+
+                            <div class="row g-5">
+
+                                <div class="col-md-8 col-lg-8" id="renderServicesTable">
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <div class="spinner-border text-dark spinner-border" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-4 col-lg-4 loadPaymentForm" id="loadPaymentForm">
+                                    <!-- <h4 class="mb-3">Billing address</h4> -->
+                                    <!-- Payment form will be rendered here -->
+                                </div>
+
+                            </div>
+
+                        </div>
+                    
+                    <!-- Modal -->
+                    <%- include('partials/modal') %>
+
+                    </main>
+                    <!-- Footer -->
+                    <%- include('partials/footer') %>
+                </div>
+        </div>
+        <!-- Theme scripts -->
+        <%- include('partials/scripts') %>
+            <!-- Plugin scripts -->
+            <script src="/js/simple-datatables.min.js" crossorigin="anonymous"></script>
+            <script src="/js/datatables-simple-demo.js"></script>
+            
+            <script src="/js/libs/Employee.js"></script>
+            <script src="/js/libs/Service.js"></script>
+            <script src="/js/libs/Order.js"></script>
+</body>
+
+</html>

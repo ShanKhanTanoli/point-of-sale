@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3.0, user-scalable=yes">
+
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>
+        <%= siteTitle %>
+    </title>
+    <!-- Theme styles -->
+    <%- include('partials/styles') %>
+</head>
+
+<body class="sb-nav-fixed">
+    <!-- Navbar -->
+    <%- include('partials/navbar') %>
+        <div id="layoutSidenav">
+            <!-- Sidebar -->
+            <%- include('partials/sidebar') %>
+                <div id="layoutSidenav_content">
+                    <main>
+                        <div class="container-fluid px-4">
+
+                            <div class="d-sm-flex align-items-center justify-content-between">
+                                <h1 class="my-4">
+                                    <%= pageTitle %>
+                                </h1>
+                            </div>
+
+
+                            <div class="row">
+
+                                <div class="col-xl-4 col-md-6 mb-4">
+
+                                    <!-- Card starts -->
+                                    <div class="card border-left-primary shadow h-100 py-2">
+
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1"
+                                                        id="displayCardPaymentsHeading">Card Payments (2)</div>
+
+                                                    <div class="h4 mb-2 font-weight-bold text-gray-800"
+                                                        id="displayCardPaymentsAmount">AED 170</div>
+
+                                                    <div class="small text-success mb-0 font-weight-bold text-gray-800"
+                                                        id="displayCardPaymentsCollectedAmount">AED 0 Collected (0)
+                                                    </div>
+
+                                                    <div class="small text-danger mb-0 font-weight-bold text-gray-800"
+                                                        id="displayCardPaymentsPendingAmount">AED 170 Pending (2)</div>
+
+
+                                                </div>
+                                                <div class="col-auto">
+                                                    <svg class="svg-inline--fa fa-credit-card fa-2x text-gray-300"
+                                                        aria-hidden="true" focusable="false" data-prefix="fas"
+                                                        data-icon="credit-card" role="img"
+                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"
+                                                        data-fa-i2svg="">
+                                                        <path fill="currentColor"
+                                                            d="M64 32C28.7 32 0 60.7 0 96v32H576V96c0-35.3-28.7-64-64-64H64zM576 224H0V416c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V224zM112 352h64c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm112 16c0-8.8 7.2-16 16-16H368c8.8 0 16 7.2 16 16s-7.2 16-16 16H240c-8.8 0-16-7.2-16-16z">
+                                                        </path>
+                                                    </svg><!-- <i class="fas fa-credit-card fa-2x text-gray-300"></i> Font Awesome fontawesome.com -->
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Card footer starts -->
+                                        <div class="card-footer d-flex align-items-center justify-content-between mb-0 pb-0 bg-transparent">
+                                            <a class="small stretched-link" href="#">View Details</a>
+                                            <div class="small"><svg class="svg-inline--fa fa-angle-right"
+                                                    aria-hidden="true" focusable="false" data-prefix="fas"
+                                                    data-icon="angle-right" role="img"
+                                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"
+                                                    data-fa-i2svg="">
+                                                    <path fill="currentColor"
+                                                        d="M246.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L178.7 256 41.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z">
+                                                    </path>
+                                                </svg><!-- <i class="fas fa-angle-right"></i> Font Awesome fontawesome.com -->
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 mb-4">
+
+                                    <!-- Card starts -->
+                                    <div class="card border-left-primary shadow h-100 py-2">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+
+                                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1"
+                                                        id="displayCashPaymentsHeading">Cash Payments (0)</div>
+
+                                                    <div class="h4 mb-2 font-weight-bold text-gray-800"
+                                                        id="displayCashPaymentsAmount">AED 0</div>
+
+                                                    <div class="small text-success mb-0 font-weight-bold text-gray-800"
+                                                        id="displayCashPaymentsCollectedAmount">AED 0 Collected (0)
+                                                    </div>
+
+                                                    <div class="small text-danger mb-0 font-weight-bold text-gray-800"
+                                                        id="displayCashPaymentsPendingAmount">AED 0 Pending (0)</div>
+
+
+                                                </div>
+                                                <div class="col-auto">
+                                                    <svg class="svg-inline--fa fa-money-bill fa-2x text-gray-300"
+                                                        aria-hidden="true" focusable="false" data-prefix="fas"
+                                                        data-icon="money-bill" role="img"
+                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"
+                                                        data-fa-i2svg="">
+                                                        <path fill="currentColor"
+                                                            d="M64 64C28.7 64 0 92.7 0 128V384c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H64zm64 320H64V320c35.3 0 64 28.7 64 64zM64 192V128h64c0 35.3-28.7 64-64 64zM448 384c0-35.3 28.7-64 64-64v64H448zm64-192c-35.3 0-64-28.7-64-64h64v64zM288 160a96 96 0 1 1 0 192 96 96 0 1 1 0-192z">
+                                                        </path>
+                                                    </svg><!-- <i class="fas fa-money-bill fa-2x text-gray-300"></i> Font Awesome fontawesome.com -->
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Card footer starts -->
+                                        <div
+                                            class="card-footer d-flex align-items-center justify-content-between mb-0 pb-0 bg-transparent">
+                                            <a class="small stretched-link" href="#">View Details</a>
+                                            <div class="small"><svg class="svg-inline--fa fa-angle-right"
+                                                    aria-hidden="true" focusable="false" data-prefix="fas"
+                                                    data-icon="angle-right" role="img"
+                                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"
+                                                    data-fa-i2svg="">
+                                                    <path fill="currentColor"
+                                                        d="M246.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L178.7 256 41.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z">
+                                                    </path>
+                                                </svg><!-- <i class="fas fa-angle-right"></i> Font Awesome fontawesome.com -->
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+                                <div class="col-xl-4 col-md-6 mb-4">
+
+                                    <!-- Card starts -->
+                                    <div class="card border-left-primary shadow h-100 py-2">
+
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1"
+                                                        id="displayTotalPaymentsHeading">Total Payments (2)</div>
+
+                                                    <div class="h4 mb-2 font-weight-bold text-gray-800"
+                                                        id="displayTotalPaymentAmount">AED 170</div>
+
+                                                    <div class="small text-success mb-0 font-weight-bold text-gray-800"
+                                                        id="displayTotalPaymentCollectedAmount">AED 0 Collected (0)
+                                                    </div>
+
+                                                    <div class="small text-danger mb-0 font-weight-bold text-gray-800"
+                                                        id="displayTotalPaymentPendingAmount">AED 170 Pending (2)</div>
+
+                                                </div>
+                                                <div class="col-auto">
+                                                    <svg class="svg-inline--fa fa-coins fa-2x text-gray-300"
+                                                        aria-hidden="true" focusable="false" data-prefix="fas"
+                                                        data-icon="coins" role="img" xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 512 512" data-fa-i2svg="">
+                                                        <path fill="currentColor"
+                                                            d="M512 80c0 18-14.3 34.6-38.4 48c-29.1 16.1-72.5 27.5-122.3 30.9c-3.7-1.8-7.4-3.5-11.3-5C300.6 137.4 248.2 128 192 128c-8.3 0-16.4 .2-24.5 .6l-1.1-.6C142.3 114.6 128 98 128 80c0-44.2 86-80 192-80S512 35.8 512 80zM160.7 161.1c10.2-.7 20.7-1.1 31.3-1.1c62.2 0 117.4 12.3 152.5 31.4C369.3 204.9 384 221.7 384 240c0 4-.7 7.9-2.1 11.7c-4.6 13.2-17 25.3-35 35.5c0 0 0 0 0 0c-.1 .1-.3 .1-.4 .2l0 0 0 0c-.3 .2-.6 .3-.9 .5c-35 19.4-90.8 32-153.6 32c-59.6 0-112.9-11.3-148.2-29.1c-1.9-.9-3.7-1.9-5.5-2.9C14.3 274.6 0 258 0 240c0-34.8 53.4-64.5 128-75.4c10.5-1.5 21.4-2.7 32.7-3.5zM416 240c0-21.9-10.6-39.9-24.1-53.4c28.3-4.4 54.2-11.4 76.2-20.5c16.3-6.8 31.5-15.2 43.9-25.5V176c0 19.3-16.5 37.1-43.8 50.9c-14.6 7.4-32.4 13.7-52.4 18.5c.1-1.8 .2-3.5 .2-5.3zm-32 96c0 18-14.3 34.6-38.4 48c-1.8 1-3.6 1.9-5.5 2.9C304.9 404.7 251.6 416 192 416c-62.8 0-118.6-12.6-153.6-32C14.3 370.6 0 354 0 336V300.6c12.5 10.3 27.6 18.7 43.9 25.5C83.4 342.6 135.8 352 192 352s108.6-9.4 148.1-25.9c7.8-3.2 15.3-6.9 22.4-10.9c6.1-3.4 11.8-7.2 17.2-11.2c1.5-1.1 2.9-2.3 4.3-3.4V304v5.7V336zm32 0V304 278.1c19-4.2 36.5-9.5 52.1-16c16.3-6.8 31.5-15.2 43.9-25.5V272c0 10.5-5 21-14.9 30.9c-16.3 16.3-45 29.7-81.3 38.4c.1-1.7 .2-3.5 .2-5.3zM192 448c56.2 0 108.6-9.4 148.1-25.9c16.3-6.8 31.5-15.2 43.9-25.5V432c0 44.2-86 80-192 80S0 476.2 0 432V396.6c12.5 10.3 27.6 18.7 43.9 25.5C83.4 438.6 135.8 448 192 448z">
+                                                        </path>
+                                                    </svg><!-- <i class="fas fa-coins fa-2x text-gray-300"></i> Font Awesome fontawesome.com -->
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Card footer starts -->
+                                        <div class="card-footer d-flex align-items-center justify-content-between mb-0 pb-0 bg-transparent">
+                                            <a class="small stretched-link" href="#">View Details</a>
+                                            <div class="small"><svg class="svg-inline--fa fa-angle-right"
+                                                    aria-hidden="true" focusable="false" data-prefix="fas"
+                                                    data-icon="angle-right" role="img"
+                                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"
+                                                    data-fa-i2svg="">
+                                                    <path fill="currentColor"
+                                                        d="M246.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L178.7 256 41.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z">
+                                                    </path>
+                                                </svg><!-- <i class="fas fa-angle-right"></i> Font Awesome fontawesome.com -->
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Modal -->
+                        <%- include('partials/modal') %>
+
+                    </main>
+                    <!-- Footer -->
+                    <%- include('partials/footer') %>
+                </div>
+        </div>
+        <!-- Theme scripts -->
+        <%- include('partials/scripts') %>
+
+</body>
+
+</html>

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3.0, user-scalable=yes">
+
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>
+        <%= siteTitle %>
+    </title>
+    <!-- Theme styles -->
+    <%- include('partials/styles') %>
+</head>
+
+<body class="sb-nav-fixed">
+    <!-- Navbar -->
+    <%- include('partials/navbar') %>
+        <div id="layoutSidenav">
+            <!-- Sidebar -->
+            <%- include('partials/sidebar') %>
+                <div id="layoutSidenav_content">
+                    <main>
+                        <div class="container-fluid px-4">
+
+                            <div class="d-sm-flex align-items-center justify-content-between">
+                                <h1 class="my-4">
+                                    <%= pageTitle %>
+                                </h1>
+                                <div class="d-flex align-items-center my-4">
+                                    <button type="button" id="addServiceButton" onclick="addServiceModal(event)"
+                                        class="btn btn-primary shadow-sm d-flex justify-content-center align-items-center">
+                                        <i class="fas fa-plus fa-sm text-white-50 pe-1"></i> Add New
+                                    </button>
+                                </div>
+                            </div>
+
+
+                            <div class="row g-5">
+
+                                <div class="col-md-12 col-lg-12">
+                                    <table id="datatablesSimple">
+                                        <thead>
+                                            <tr>
+                                                <th>Id</th>
+                                                <th>Service Name</th>
+                                                <th>Service Price</th>
+                                                <th>Is Active</th>
+                                                <!-- <th>Created At</th>
+                                                <th>Created By</th> -->
+                                                <!-- <th>Updated At</th>
+                                                <th>Updated By</th> -->
+                                                <th>Edit</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% if(services !=null){ %>
+                                                <% services.forEach((service, index)=> { %>
+                                                    <tr>
+                                                        <td>
+                                                            <%= service.id %>
+                                                        </td>
+                                                        <td>
+                                                            <%= service.service_name %>
+                                                        </td>
+                                                        <td>AED <%= service.service_price %>
+                                                        </td>
+                                                        <td>
+                                                            <span
+                                                                class="badge <%= service.is_active == 1 ? 'bg-primary' : 'bg-danger' %>">
+                                                                <%= service.is_active==1 ? 'ACTIVE' : 'IN-ACTIVE' %>
+                                                            </span>
+                                                        </td>
+                                                        <!-- <td>
+                                                            <%= service.created_at %>
+                                                        </td> -->
+                                                        <!-- <td>
+                                                            <%= service.created_by %>
+                                                        </td> -->
+                                                        <!-- <td>
+                                                            <%= service.updated_at %>
+                                                        </td>
+                                                        <td>
+                                                            <%= service.updated_by %>
+                                                        </td> -->
+                                                        <td>
+                                                            <button type="button" data-service-id="<%= service.id %>"
+                                                                data-service-name="<%= service.service_name %>"
+                                                                data-service-price="<%= service.service_price %>"
+                                                                data-service-is-active="<%= service.is_active %>"
+                                                                id="edit<%= service.id %>Service"
+                                                                onclick="updateServiceModal(event)"
+                                                                class="btn btn-sm btn-link text-success">
+                                                                Edit
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <% }) %>
+                                                        <% } %>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Modal -->
+                        <%- include('partials/modal') %>
+
+                    </main>
+                    <!-- Footer -->
+                    <%- include('partials/footer') %>
+                </div>
+        </div>
+        <!-- Theme scripts -->
+        <%- include('partials/scripts') %>
+            <!-- Plugin scripts -->
+            <script src="/js/simple-datatables.min.js"></script>
+            <script src="/js/datatables-simple-demo.js"></script>
+
+            <script>
+
+                // Update service modal
+                function updateServiceModal(event) {
+
+                    // Get service id
+                    let service_id = $(event.target).attr("data-service-id");
+
+                    // Get service name
+                    let service_name = $(event.target).attr("data-service-name");
+
+                    // Get service price
+                    let service_price = $(event.target).attr("data-service-price");
+
+                    // Get service visibility
+                    let service_visibility = $(event.target).attr("data-service-is-active");
+
+                    // Form element
+                    const htmlForm = `<form class="needs-validation" onsubmit="updateService(event)">
+
+                                        <div class="row g-3">
+
+                                            <div class="col-sm-6">
+                                                <label for="serviceNameInput" class="form-label">
+                                                    Service Name*
+                                                </label>
+
+                                                <div class="input-group has-validation">
+                                                        <input type="hidden" id="serviceIdInput" value="${service_id}" required="">
+                                                        <input type="text" class="form-control" id="serviceNameInput" placeholder="Service Name" value="${service_name}" required="">
+                                                        <div class="invalid-feedback">
+                                                            Service name is required.
+                                                        </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-6">
+                                                <label for="servicePriceInput" class="form-label">
+                                                    Service Price*
+                                                </label>
+
+                                                <div class="input-group has-validation">
+                                                    <span class="input-group-text">AED</span>
+                                                    <input type="text" class="form-control" id="servicePriceInput" placeholder="Service Price" value="${service_price}" required="">
+                                                    <div class="invalid-feedback">
+                                                        Service price is required.
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12 col-lg-12 col-sm-12">
+                                                <label for="Visibility" class="form-label">Visibility*</label>
+                                                <select class="form-select" id="selectServiceVisibility" required="">
+                                                    <option value="1" ${service_visibility == 1 ? 'selected' : ''}>Active</option>
+                                                    <option value="0" ${service_visibility == 0 ? 'selected' : ''}>Non-active</option>
+                                                </select>
+                                                <div class="invalid-feedback" id="selectServiceVisibilityErrorFeedback" style="display: none;">
+                                                    Please select visibility.
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <button class="w-100 btn btn-primary btn-lg mt-5" id="updateServiceButton" type="submit">
+                                            Save Changes
+                                        </button>
+
+                                    </form>`;
+
+                    // Modal header
+                    const modalHeader = `<h5 class="modal-title" id="genericModalLabel">Update Service</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>`;
+
+                    // Modal footer
+                    const modalFooter = `<button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Back</button>
+                                        <button type="button" class="btn btn-primary btn-sm collectAmount" id="collectAmount" onclick="collectAmount(event)">Collect</button>`;
+
+                    // Modal id
+                    const genericModal = $("#genericModal");
+
+                    //  Modal header id
+                    const genericModalHeader = $("#genericModalHeader");
+                    // Add html
+                    genericModalHeader.html(modalHeader);
+
+                    //  Modal body id
+                    const genericModalBody = $("#genericModalBody");
+                    // Add html
+                    genericModalBody.html(htmlForm);
+
+                    //  Modal footer id
+                    const genericModalFooter = $("#genericModalFooter");
+                    // Add html
+                    // genericModalFooter.html(modalFooter);
+
+                    // Open modal
+                    genericModal.modal('show');
+                }
+
+                // Update service
+                function updateService(event) {
+
+                    event.preventDefault();
+                    // Get inputs
+                    let serviceIdInput = $("#serviceIdInput").val();
+                    let serviceNameInput = $("#serviceNameInput").val();
+                    let servicePriceInput = $("#servicePriceInput").val();
+                    let selectServiceVisibility = $("#selectServiceVisibility").val();
+
+                    // Get button
+                    let updateServiceButton = $("#updateServiceButton");
+
+                    // Disable
+                    updateServiceButton.addClass('disabled');
+                    // Change the text
+                    updateServiceButton.text('Saving');
+
+                    // Make http request
+                    makeHTTPRequest("/admin/updateService", "POST", "application/json", JSON.stringify({ serviceIdInput, serviceNameInput, servicePriceInput, selectServiceVisibility }),
+                        function (success) {
+                            // Get success message
+                            let successMessage = success.message ? success.message : 'Operation successful.';
+                            // Success message
+                            toastr.success(successMessage, "Success");
+                            // Update the page
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+
+                        }, function (error) {
+
+                            let errorMessage = error.responseJSON ? (error.responseJSON.message ? error.responseJSON.message : 'Something went wrong. Please refresh the page and try again.') : 'Something went wrong. Please refresh the page and try again.';
+                            // Error message
+                            toastr.error(errorMessage, "Error");
+                        }, function (always) {
+                            // Enable
+                            updateServiceButton.removeClass('disabled');
+                            // Change the text
+                            updateServiceButton.text('Save Changes');
+                        });
+                }
+
+                // Add service modal
+                function addServiceModal(event) {
+
+                    // Get service id
+                    let service_id = $(event.target).attr("data-service-id");
+
+                    // Get service name
+                    let service_name = $(event.target).attr("data-service-name");
+
+                    // Get service price
+                    let service_price = $(event.target).attr("data-service-price");
+
+                    // Get service visibility
+                    let service_visibility = $(event.target).attr("data-service-is-active");
+
+                    // Form element
+                    const htmlForm = `<form class="needs-validation" onsubmit="addService(event)">
+
+                                        <div class="row g-3">
+
+                                            <div class="col-sm-6">
+                                                <label for="serviceNameInput" class="form-label">
+                                                    Service Name*
+                                                </label>
+
+                                                <div class="input-group has-validation">
+                                                        <input type="text" class="form-control" id="serviceNameInput" placeholder="Service Name" value="" required="">
+                                                        <div class="invalid-feedback">
+                                                            Service name is required.
+                                                        </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-6">
+                                                <label for="servicePriceInput" class="form-label">
+                                                    Service Price*
+                                                </label>
+
+                                                <div class="input-group has-validation">
+                                                    <span class="input-group-text">AED</span>
+                                                    <input type="text" class="form-control" id="servicePriceInput" placeholder="Service Price" value="" required="">
+                                                    <div class="invalid-feedback">
+                                                        Service price is required.
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12 col-lg-12 col-sm-12">
+                                                <label for="Visibility" class="form-label">Visibility*</label>
+                                                <select class="form-select" id="selectServiceVisibility" required="">
+                                                    <option value="0">Non-active</option>
+                                                    <option value="1">Active</option>
+                                                </select>
+                                                <div class="invalid-feedback" id="selectServiceVisibilityErrorFeedback" style="display: none;">
+                                                    Please select visibility.
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <button class="w-100 btn btn-primary btn-lg mt-5" id="addServiceButton" type="submit">
+                                            Save Changes
+                                        </button>
+
+                                    </form>`;
+
+                    // Modal header
+                    const modalHeader = `<h5 class="modal-title" id="genericModalLabel">Add Service</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>`;
+
+                    // Modal id
+                    const genericModal = $("#genericModal");
+
+                    //  Modal header id
+                    const genericModalHeader = $("#genericModalHeader");
+                    // Add html
+                    genericModalHeader.html(modalHeader);
+
+                    //  Modal body id
+                    const genericModalBody = $("#genericModalBody");
+                    // Add html
+                    genericModalBody.html(htmlForm);
+
+                    // Open modal
+                    genericModal.modal('show');
+                }
+
+                // Add service
+                function addService(event) {
+
+                    event.preventDefault();
+
+                    let serviceNameInput = $("#serviceNameInput").val();
+                    let servicePriceInput = $("#servicePriceInput").val();
+                    let selectServiceVisibility = $("#selectServiceVisibility").val();
+
+                    // Get button
+                    let addServiceButton = $("#addServiceButton");
+
+                    // Disable
+                    addServiceButton.addClass('disabled');
+                    // Change the text
+                    addServiceButton.text('Saving');
+
+                    // Make http request
+                    makeHTTPRequest("/admin/addService", "POST", "application/json", JSON.stringify({ serviceNameInput, servicePriceInput, selectServiceVisibility }),
+                        function (success) {
+                            // Get success message
+                            let successMessage = success.message ? success.message : 'Operation successful.';
+                            // Success message
+                            toastr.success(successMessage, "Success");
+                            // Update the page
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+
+                        }, function (error) {
+
+                            let errorMessage = error.responseJSON ? (error.responseJSON.message ? error.responseJSON.message : 'Something went wrong. Please refresh the page and try again.') : 'Something went wrong. Please refresh the page and try again.';
+                            // Error message
+                            toastr.error(errorMessage, "Error");
+                        }, function (always) {
+                            // Enable
+                            addServiceButton.removeClass('disabled');
+                            // Change the text
+                            addServiceButton.text('Save Changes');
+                        });
+                }
+
+            </script>
+</body>
+
+</html>

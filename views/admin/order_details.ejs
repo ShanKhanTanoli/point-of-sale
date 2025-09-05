@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3.0, user-scalable=yes">
+
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>
+        <%= siteTitle %>
+    </title>
+    <!-- Theme styles -->
+    <%- include('partials/styles') %>
+</head>
+
+<body class="sb-nav-fixed">
+    <!-- Navbar -->
+    <%- include('partials/navbar') %>
+        <div id="layoutSidenav">
+            <!-- Sidebar -->
+            <%- include('partials/sidebar') %>
+                <div id="layoutSidenav_content">
+                    <main>
+                        <div class="container-fluid px-4">
+
+                            <div class="d-sm-flex align-items-center justify-content-between">
+                                <h1 class="my-4">
+                                    <%= pageTitle %>
+                                </h1>
+                                <div class="d-flex align-items-center my-4" style="column-gap: 0.5rem;">
+                                    <a href="/admin/orders" role="button"
+                                        class="btn btn-primary shadow-sm d-flex justify-content-center align-items-center">
+                                        <i class="fas fa-chevron-left fa-sm text-white-50 pe-1"></i> View Orders
+                                    </a>
+
+                                    <% if(order_header.order_status != "open"){ %>
+
+                                    <button type="button" onclick="orderReOpenModal(event, '<%= order_header.id %>')" role="button"
+                                        class="btn btn-success shadow-sm d-flex justify-content-center align-items-center">
+                                        <i class="fas fa-refresh fa-sm text-white-50 pe-1"></i> Re-Open
+                                    </button>
+
+                                    <% } %>
+
+
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+
+                                <div class="col-sm-12 col-lg-12 col-md-12">
+                                    <div class="card mb-4">
+                                        <div class="card-header">
+                                            <strong>
+                                                Order #<%= order_header.id %> - <%= order_header.order_closed_at %> 
+                                            </strong>
+                                        </div>
+
+                                        <div class="card-body">
+
+                                            <div class="table-responsive">
+                                                <table class="table mb-0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col" class="px-0">Total Amount</th>
+                                                            <th scope="col" class="px-0">Paid Amount</th>
+                                                            <th scope="col" class="px-0">Balance Amount</th>
+                                                            <th scope="col" class="px-0">Received By</th>
+                                                            <th scope="col" class="px-0">Discount</th>
+                                                            <th scope="col" class="px-0">Type</th>
+                                                            <th scope="col" class="px-0">Collection</th>
+                                                            <th scope="col" class="px-0">Collection Date</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+
+                                                            <td class="px-0">AED <%= order_header.payable_amount %>
+                                                            </td>
+                                                            
+                                                            <td class="px-0">
+                                                                <strong class="text-danger p-1"
+                                                                    style="background-color: yellow;">
+                                                                    AED <%= order_header.amount_collected %>
+                                                                </strong>
+                                                            </td>
+                                                            
+                                                            <td class="px-0">
+                                                                <strong class="text-danger p-1"
+                                                                    style="background-color: yellow;">
+                                                                    AED <%= order_header.balance_amount %>
+                                                                </strong>
+                                                            </td>
+                                                            
+                                                            <td class="px-0">
+                                                                <strong class="text-danger p-1"
+                                                                    style="background-color: yellow;">
+                                                                    <%= order_header.employee_name %>
+                                                                </strong>
+                                                            </td>
+                                                            
+                                                            <td class="px-0"><strong class="text-danger p-1"
+                                                                    style="background-color: yellow;">
+                                                                    AED <%=
+                                                                        order_header.payable_amount-order_header.amount_collected==0
+                                                                        ? 0 :
+                                                                        order_header.payable_amount-order_header.amount_collected
+                                                                        %></strong>
+                                                            </td>
+                                                            
+                                                            <td class="px-0">
+                                                                <span class="badge <%= order_header.payment_type == "cash" ? "bg-primary" : "bg-success" %>
+                                                                    text-uppercase">
+                                                                    <%= order_header.payment_type %>
+                                                                </span>
+                                                            </td>
+                                                            
+                                                            <td class="px-0">
+                                                                <strong
+                                                                    class="p-1 <%= order_header.amount_collected_by_owner == 1 ? 'text-white' : 'text-danger' %>"
+                                                                    style="<%= order_header.amount_collected_by_owner == 1 ? 'background-color: green;' : 'background-color: yellow;' %>">
+                                                                    <%= order_header.amount_collected_by_owner==1
+                                                                        ? 'COLLECTED' : 'PENDING' %>
+                                                                </strong>
+                                                            </td>
+                                                            
+                                                            <td class="px-0">
+                                                                <%= order_header.amount_collected_by_owner_at %>
+                                                            </td>
+                                                            
+                                                        </tr>
+
+                                                        <tr>
+                                                            <th scope="col" colspan="7" class="px-0"
+                                                                style="border-bottom: transparent; padding-top: 40px; padding-bottom: 0px;">
+                                                                Order Remarks</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="px-0" colspan="7"
+                                                                style="border-bottom: transparent;">
+                                                                <%= order_header.order_remarks=='' ? "NOT AVAILABLE" :
+                                                                    order_header.order_remarks %>
+                                                            </td>
+                                                        </tr>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+
+                                        </div>
+
+                                        <div class="border border-1 card-header">
+                                            <strong>
+                                                Order Services
+                                            </strong>
+                                        </div>
+
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table mb-0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col" class="px-0">#</th>
+                                                            <th scope="col" class="px-0">Service</th>
+                                                            <th scope="col" class="px-0">Price</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                        <% order_details.forEach((order, index)=> { %>
+                                                            <tr>
+                                                                <td class="px-0" scope="row"
+                                                                    style="border-bottom: transparent;">
+                                                                    <%= (index+1) %>
+                                                                </td>
+                                                                <td class="px-0" style="border-bottom: transparent;">
+                                                                    <%= order.service_name %>
+                                                                </td>
+                                                                <td class="px-0" style="border-bottom: transparent;">
+                                                                    <strong class="text-danger p-1"
+                                                                        style="background-color: yellow;">
+                                                                        AED <%= order.service_price %>
+                                                                    </strong>
+                                                                </td>
+                                                            </tr>
+                                                            <% }) %>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                        <!-- Modal -->
+                        <%- include('partials/modal') %>
+
+                    </main>
+                    <!-- Footer -->
+                    <%- include('partials/footer') %>
+                </div>
+        </div>
+        <!-- Theme scripts -->
+        <%- include('partials/scripts') %>
+            <!-- Plugin scripts -->
+            <script src="/js/simple-datatables.min.js"></script>
+            <script src="/js/datatables-simple-demo.js"></script>
+            <script src="/js/libs/AdminPayments.js"></script>
+
+</body>
+
+</html>
